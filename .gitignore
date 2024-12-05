@@ -1,0 +1,60 @@
+# Arquivos do Quartus gerados automaticamente
+db/
+incremental_db/
+*.sopcinfo
+*.qws
+*.rpt
+*.chg
+*.csv
+*.html
+*.htm
+*.tcl
+*.jdi
+*.pin
+*.eqn
+*.smsg
+*.qws.lock
+
+# Arquivos de simulação gerados automaticamente
+simulation/
+*.vcd
+*.wlf
+
+# Arquivos de backup
+*.bak
+*.backup
+*.~*
+
+# Arquivos de compilação e resultados intermediários
+*.qdb
+*.sof
+*.pof
+*.jic
+*.hex
+*.map
+*.rco
+*.sld
+*.ppf
+*.done
+*.qip
+*.vho
+*.vqm
+*.qsf
+*.qpf
+*.summary
+
+# Diretórios de cache
+*.cache/
+*.ipcache/
+*.cdb/
+
+# Outros temporários
+*.temp
+*.log
+*.obj
+*.out
+
+# Arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
+

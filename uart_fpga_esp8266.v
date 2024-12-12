@@ -1,14 +1,19 @@
 module uart_fpga_esp8266
 (
-    input CLOCK_50, // clock of 50MHz
+    input CLK,
     input RST
 );
 
 wire BCLK;
 
 baudrate baudrate
+#(
+    .CLOCK(50000000), // DE2-155 is 50MHz of clock
+    .BAUDRATE(9600),
+    .BAUDCLOCK(16),   // number of tick in one BCLK
+)
 (
-    .CLK(CLOCK_50),
+    .CLK(CLK),
     .RST(RST),
     .BCLK(BCLK)
 );

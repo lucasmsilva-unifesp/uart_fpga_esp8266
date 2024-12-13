@@ -2,42 +2,54 @@ module transmitter_timing_control
 (
     input BCLK,
     input RST,
-    input signal_start,     // signal to initiaze trasmition
-    input signal_busy,      // signal to indicate the transmitter is busy
-    output reg signal_load, // signal to load data to register
-    output reg signal_shift // signal to shift bit
+    input tx_start,       // signal to initiaze trasmition
+    input thr_empty,      // THR is empty
+    input tsr_busy,       // signal to indicate the transmitter is busy
+    input [7:0] LCR,      // register LCR
+    output [1:0] wsl,     // word length select
+    // output stb,           // number of STOP
+    // output [2:0] parity,  // parity signal
+    // output bc,            // break control
+    output reg load_data, // signal to load data to register
+    output reg shift_tsr  // signal to shift bit
 );
 
-reg [3:0] state;
 
-localparam IDLE = 0;
-localparam LOAD = 1;
-localparam SHIFT = 2;
+assign wsl = LCR[1:0];
+// assign stb = LCR[2];
+// assign parity = {LCR[5], LCR[4], LCR[3]};
+// assign bc = LCR[6];
+
+reg [1:0] state;
+
+localparam IDLE = 2'b00;
+localparam LOAD = 2'b01;
+localparam SHIFT = 2'b10;
 
 always @(posedge BCLK or posedge RST) begin
     if (RST) begin
-        state        <= IDLE;
-        signal_load  <= 0;
-        signal_shift <= 0;
+        state     <= IDLE;
+        load_data <= 0;
+        shift_tsr <= 0;
     end else begin
         case (state)
         IDLE: begin
-            if (signal_start && !signal_busy) begin
+            if (tx_start && !tsr_busy) begin
                 state <= LOAD;
             end
-            signal_load  <= 0;
-            signal_shift <= 0;
+            load_data <= 0;
+            shift_tsr <= 0;
         end
         LOAD: begin
             LOAD: begin
-                signal_load <= 1;
-                state       <= SHIFT;
+                load_data <= 1;
+                state     <= SHIFT;
             end
         end
         SHIFT: begin
-            signal_load  <= 0;
-            signal_shift <= 1; 
-            if (!signal_busy) begin
+            load_data <= 0;
+            shift_tsr <= 1; 
+            if (!tsr_busy) begin
                 state <= IDLE; 
             end
         end
